@@ -15,7 +15,7 @@ from selenium import webdriver
 
 
 def init_browser(): 
-    executable_path = {'executable_path': '/chromedriver/79.0.3945.36/chromedriver'}
+    executable_path = {'executable_path': '/usr/local/Caskroom/chromedriver/79.0.3945.36/chromedriver'}
     return Browser('chrome', **executable_path, headless=False)
 
 
@@ -156,10 +156,3 @@ def scrape():
     
 
     return data_dict
-
-
-# In[ ]:
-
-
-
-
