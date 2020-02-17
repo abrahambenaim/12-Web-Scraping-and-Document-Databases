@@ -51,12 +51,33 @@ def mars_news():
 
 def mars_image():
     browser = init_browser()
-    base_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
-    browser.visit(base_url)
+    url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
+    browser.visit(url)
+    full_image_button = browser.find_by_id("full_image")
+    full_image_button.click()
+    
+    more_info_page = browser.links.find_by_partial_text("more info")
+    more_info_page.click()
+    
     html = browser.html
-    soup = BeautifulSoup(html, "html.parser")
-    image = soup.find("img", class_="thumb")["src"]
-    featured_image_url = "https://www.jpl.nasa.gov" + image
+    image_page_soup = BeautifulSoup(html, "html.parser")
+
+
+    try:
+        top_img_class = image_page_soup.find('figure' , attrs={'class': 'lede'})
+    
+        #Extracting PARTIAL img src URL
+        partial_featured_image_url = top_img_class.find('img')['src']
+    
+        featured_jpl_logo_class =  image_page_soup.find('div', attrs={'class': 'jpl_logo'})
+    
+        # Extracting the href of jpl site (equivalent to domain site URL)
+        
+        domain_jpl_site_url =  featured_jpl_logo_class.find('a')['href'][0:-1]
+    except AttributeError:
+        return None
+    # Create final featured img url 
+    featured_image_url = f"https:{domain_jpl_site_url}{partial_featured_image_url}"
     
     return featured_image_url
 
